@@ -1,15 +1,1 @@
-{
-  "sectors": [
-    {
-      "id": "sector1",
-      "name": "Alpha Sector",
-      "objects": [
-        {
-          "type": "PLANET",
-          "name": "Earth",
-          "resources": ["WATER", "MINERALS"]
-        }
-      ]
-    }
-  ]
-}
+{"sectors":[{"id":"test1","name":"Test Sector","objects":[{"type":"PLANET","name":"Test Planet","resources":["WATER","MINERALS"]}]}]}
