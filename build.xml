@@ -1,0 +1,48 @@
+<project name="SpaceExplorer" default="compile">
+    <property name="src.dir" value="src/main/java"/>
+    <property name="build.dir" value="build"/>
+    <property name="lib.dir" value="lib"/>
+    <property name="main.class" value="com.spaceexplorer.Main"/>
+
+    <path id="classpath">
+        <fileset dir="${lib.dir}">
+            <include name="*.jar"/>
+        </fileset>
+    </path>
+
+    <target name="init">
+        <mkdir dir="${build.dir}"/>
+        <mkdir dir="${lib.dir}"/>
+    </target>
+
+    <target name="resolve" depends="init">
+        <get src="https://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-databind/2.15.0/jackson-databind-2.15.0.jar"
+             dest="${lib.dir}/jackson-databind-2.15.0.jar" usetimestamp="true"/>
+        <get src="https://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-core/2.15.0/jackson-core-2.15.0.jar"
+             dest="${lib.dir}/jackson-core-2.15.0.jar" usetimestamp="true"/>
+        <get src="https://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-annotations/2.15.0/jackson-annotations-2.15.0.jar"
+             dest="${lib.dir}/jackson-annotations-2.15.0.jar" usetimestamp="true"/>
+    </target>
+
+    <target name="compile" depends="resolve">
+        <javac srcdir="${src.dir}"
+               destdir="${build.dir}"
+               debug="true"
+               includeantruntime="false">
+            <classpath refid="classpath"/>
+        </javac>
+    </target>
+
+    <target name="run" depends="compile">
+        <java classname="${main.class}" fork="true">
+            <classpath>
+                <path refid="classpath"/>
+                <pathelement location="${build.dir}"/>
+            </classpath>
+        </java>
+    </target>
+
+    <target name="clean">
+        <delete dir="${build.dir}"/>
+    </target>
+</project>
