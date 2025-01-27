@@ -1,7 +1,0 @@
-game:
-  player:
-    initial_health: 100
-    initial_inventory_size: 10
-  objects:
-    scan_cost: 5
-    collect_cost: 10

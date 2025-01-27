@@ -1,0 +1,4 @@
+paths:
+  gameMap: data/game_map.json
+  players: data/players.json
+  items: data/items.json

@@ -1,0 +1,136 @@
+{
+  "sectors": [
+    {
+      "id": "inner_solar_system",
+      "name": "Inner Solar System",
+      "objects": [
+        {
+          "type": "PLANET",
+          "name": "Mercury",
+          "description": "The smallest and innermost planet in the Solar System",
+          "resources": [
+            "IRON",
+            "NICKEL",
+            "TITANIUM"
+          ],
+          "facts": [
+            "Mercury has no moons",
+            "It has the most eccentric orbit of all planets",
+            "Despite being closest to the Sun, Venus is actually hotter"
+          ]
+        },
+        {
+          "type": "PLANET",
+          "name": "Venus",
+          "description": "Second planet from the Sun and Earth's sister planet",
+          "resources": [
+            "CARBON_DIOXIDE",
+            "SULFUR",
+            "NITROGEN"
+          ],
+          "facts": [
+            "Venus rotates backwards compared to most planets",
+            "It has the hottest surface of any planet in our solar system",
+            "The atmospheric pressure is 90 times that of Earth"
+          ]
+        },
+        {
+          "type": "PLANET",
+          "name": "Earth",
+          "description": "Our home planet and the only known planet with life",
+          "resources": [
+            "WATER",
+            "MINERALS",
+            "OXYGEN"
+          ],
+          "facts": [
+            "Earth is the only planet not named after a god or goddess",
+            "It is the densest planet in the Solar System",
+            "71% of Earth's surface is covered in water"
+          ]
+        },
+        {
+          "type": "PLANET",
+          "name": "Mars",
+          "description": "The Red Planet and potential future home for humanity",
+          "resources": [
+            "IRON_OXIDE",
+            "ICE",
+            "MINERALS"
+          ],
+          "facts": [
+            "Mars has the largest volcano in the solar system",
+            "It has two small moons: Phobos and Deimos",
+            "The soil contains the nutrients needed to grow plants"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "outer_solar_system",
+      "name": "Outer Solar System",
+      "objects": [
+        {
+          "type": "PLANET",
+          "name": "Jupiter",
+          "description": "The largest planet in our Solar System",
+          "resources": [
+            "HYDROGEN",
+            "HELIUM",
+            "METHANE"
+          ],
+          "facts": [
+            "Jupiter has at least 79 moons",
+            "The Great Red Spot is a giant storm that has lasted for centuries",
+            "It has the strongest magnetic field of any planet"
+          ]
+        },
+        {
+          "type": "PLANET",
+          "name": "Saturn",
+          "description": "The ringed planet",
+          "resources": [
+            "HYDROGEN",
+            "HELIUM",
+            "ICE"
+          ],
+          "facts": [
+            "Saturn's rings are made mostly of ice and rock",
+            "It has 82 confirmed moons",
+            "It is the least dense planet in the Solar System"
+          ]
+        },
+        {
+          "type": "PLANET",
+          "name": "Uranus",
+          "description": "The sideways planet",
+          "resources": [
+            "METHANE",
+            "WATER_ICE",
+            "AMMONIA"
+          ],
+          "facts": [
+            "Uranus rotates on its side",
+            "It was the first planet discovered using a telescope",
+            "It has 27 known moons"
+          ]
+        },
+        {
+          "type": "PLANET",
+          "name": "Neptune",
+          "description": "The windiest planet",
+          "resources": [
+            "METHANE",
+            "HYDROGEN",
+            "HELIUM"
+          ],
+          "facts": [
+            "Neptune has the strongest winds in the Solar System",
+            "It was discovered through mathematical predictions",
+            "It has 14 known moons"
+          ]
+        }
+      ]
+    }
+  ]
+}

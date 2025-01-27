@@ -3,10 +3,11 @@ package main.java.com.spaceexplorer.repository;
 import java.util.List;
 import java.util.Optional;
 
-public interface Repository<T> {
+public interface Repository<T, ID> {
     void save(T entity);
-    Optional<T> findById(String id);
+    Optional<T> findById(ID id);
     List<T> findAll();
-    void delete(String id);
-    void update(T entity);
+    void delete(ID id);
+    void update(ID id, T entity);
+    boolean exists(ID id);
 }

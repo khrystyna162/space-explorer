@@ -1,52 +1,56 @@
 package main.java.com.spaceexplorer.repository;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import main.java.com.spaceexplorer.model.GameMap;
-
 import java.io.File;
 import java.util.List;
 import java.util.Optional;
-
-public class GameRepository implements Repository<GameMap> {
-    private final ObjectMapper mapper;
-    private final String filePath;
+public class GameRepository extends BaseRepository<GameMap> implements Repository<GameMap, String> {
 
     public GameRepository(String filePath) {
-        this.mapper = new ObjectMapper();
-        this.filePath = filePath;
+        super(filePath);
     }
 
     @Override
-    public void save(GameMap entity) {
-        try {
-            mapper.writeValue(new File(filePath), entity);
-        } catch (Exception e) {
-            System.err.println("Error saving: " + e.toString());
-        }
+    public void save(GameMap map) {
+        validateGameMap(map);
+        writeToFile(map);
     }
 
     @Override
     public Optional<GameMap> findById(String id) {
-        try {
-            return Optional.ofNullable(mapper.readValue(new File(filePath), GameMap.class));
-        } catch (Exception e) {
-            return Optional.empty();
-        }
+        GameMap map = readFromFile(GameMap.class);
+        return Optional.ofNullable(map);
     }
 
     @Override
     public List<GameMap> findAll() {
-        return List.of(findById("").orElse(new GameMap()));
+        GameMap map = readFromFile(GameMap.class);
+        return map != null ? List.of(map) : List.of();
     }
 
     @Override
     public void delete(String id) {
-        File file = new File(filePath);
-        file.delete();
+        new File(filePath).delete();
+        logger.info("Game map deleted");
     }
 
     @Override
-    public void update(GameMap entity) {
-        save(entity);
+    public void update(String id, GameMap map) {
+        validateGameMap(map);
+        writeToFile(map);
+    }
+
+    @Override
+    public boolean exists(String id) {
+        return new File(filePath).exists();
+    }
+
+    private void validateGameMap(GameMap map) {
+        if (map == null) {
+            throw new IllegalArgumentException("Game map cannot be null");
+        }
+        if (map.getSectors() == null || map.getSectors().isEmpty()) {
+            throw new IllegalArgumentException("Game map must have at least one sector");
+        }
     }
 }

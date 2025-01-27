@@ -10,42 +10,36 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public class PlayerRepository implements Repository<Player> {
-    private final ObjectMapper mapper;
-    private final String filePath;
+public class PlayerRepository extends BaseRepository<Player> implements Repository<Player, String> {
     private List<Player> players;
 
     public PlayerRepository(String filePath) {
-        this.mapper = new ObjectMapper();
-        this.filePath = filePath;
-        this.loadPlayers();
+        super(filePath);
+        loadPlayers();
     }
 
     private void loadPlayers() {
         try {
-            File file = new File(filePath);
-            if (file.exists()) {
-                players = mapper.readValue(file, new TypeReference<List<Player>>() {});
-            } else {
+            players = readFromFile(new TypeReference<List<Player>>() {});
+            if (players == null) {
                 players = new ArrayList<>();
             }
         } catch (Exception e) {
-            System.err.println("Error loading players: " + e.toString());
+            logger.error("Error loading players: {}", e.getMessage());
             players = new ArrayList<>();
         }
     }
 
     private void savePlayers() {
-        try {
-            mapper.writeValue(new File(filePath), players);
-        } catch (Exception e) {
-            System.err.println("Error saving players: " + e.toString());
-        }
+        writeToFile(players);
     }
 
     @Override
     public void save(Player player) {
-        player.setId(UUID.randomUUID().toString());
+        validatePlayer(player);
+        if (player.getId() == null) {
+            player.setId(UUID.randomUUID().toString());
+        }
         players.add(player);
         savePlayers();
     }
@@ -69,19 +63,38 @@ public class PlayerRepository implements Repository<Player> {
     }
 
     @Override
-    public void update(Player player) {
+    public void update(String id, Player player) {
+        validatePlayer(player);
         for (int i = 0; i < players.size(); i++) {
-            if (players.get(i).getId().equals(player.getId())) {
+            if (players.get(i).getId().equals(id)) {
                 players.set(i, player);
                 savePlayers();
                 return;
             }
         }
+        throw new IllegalArgumentException("Player not found: " + id);
+    }
+
+    @Override
+    public boolean exists(String id) {
+        return players.stream().anyMatch(p -> p.getId().equals(id));
     }
 
     public Optional<Player> findByUsername(String username) {
         return players.stream()
                 .filter(p -> p.getUsername().equals(username))
                 .findFirst();
+    }
+
+    private void validatePlayer(Player player) {
+        if (player == null) {
+            throw new IllegalArgumentException("Player cannot be null");
+        }
+        if (player.getUsername() == null || player.getUsername().isEmpty()) {
+            throw new IllegalArgumentException("Username cannot be empty");
+        }
+        if (player.getPassword() == null || player.getPassword().isEmpty()) {
+            throw new IllegalArgumentException("Password cannot be empty");
+        }
     }
 }
