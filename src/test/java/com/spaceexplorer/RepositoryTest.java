@@ -6,6 +6,8 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
+
+import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -23,9 +25,19 @@ public class RepositoryTest {
 
     @Before
     public void setup() {
+        new File(TEST_RESOURCES).mkdirs();
+
         gameRepository = new GameRepository(TEST_GAME_MAP);
         itemRepository = new ItemRepository(TEST_ITEMS);
         playerRepository = new PlayerRepository(TEST_PLAYERS);
+
+        clearTestFiles();
+    }
+
+    private void clearTestFiles() {
+        new File(TEST_GAME_MAP).delete();
+        new File(TEST_PLAYERS).delete();
+        new File(TEST_ITEMS).delete();
     }
 
     @Test
@@ -144,12 +156,14 @@ public class RepositoryTest {
 
     @Test
     public void testItemFiltering() {
+        itemRepository.clear(); // Очищаємо репозиторій перед тестом
+
         itemRepository.save(new Item("Water", "RESOURCE"));
         itemRepository.save(new Item("Map", "TOOL"));
         itemRepository.save(new Item("Minerals", "RESOURCE"));
 
         List<Item> resources = itemRepository.findByType("RESOURCE");
-        assertEquals(6, resources.size()); // 4 def + 2 постійно наростає
+        assertEquals(2, resources.size()); // Тепер тільки 2 ресурси, які ми додали
         assertTrue(resources.stream().allMatch(item -> item.getType().equals("RESOURCE")));
     }
 

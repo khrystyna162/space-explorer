@@ -54,14 +54,16 @@ public class ItemRepository extends BaseRepository<Item> implements Repository<I
      * This includes basic resources, artifacts, and tools.
      */
     private void initializeDefaultItems() {
-        items.addAll(Arrays.asList(
-                new Item("Water", "RESOURCE"),
-                new Item("Minerals", "RESOURCE"),
-                new Item("Fuel", "RESOURCE"),
-                new Item("Ancient Artifact", "ARTIFACT"),
-                new Item("Space Map", "TOOL")
-        ));
-        saveItems();
+        if (items.isEmpty()) {
+            items.addAll(Arrays.asList(
+                    new Item("Water", "RESOURCE"),
+                    new Item("Minerals", "RESOURCE"),
+                    new Item("Fuel", "RESOURCE"),
+                    new Item("Ancient Artifact", "ARTIFACT"),
+                    new Item("Space Map", "TOOL")
+            ));
+            saveItems();
+        }
     }
 
     /**
@@ -177,5 +179,10 @@ public class ItemRepository extends BaseRepository<Item> implements Repository<I
         if (item.getType() == null || item.getType().isEmpty()) {
             throw new IllegalArgumentException("Item type cannot be empty");
         }
+    }
+
+    public void clear() {
+        items.clear();
+        saveItems();
     }
 }
