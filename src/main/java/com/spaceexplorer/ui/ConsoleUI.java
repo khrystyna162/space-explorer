@@ -10,14 +10,42 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Console-based user interface for the Space Explorer game.
+ * Provides menus for player authentication, game interaction,
+ * and resource management. Handles all user input and output through
+ * the command line interface.
+ *
+ * @author Space Explorer Development Team
+ * @version 1.0
+ * @since 1.0
+ */
 public class ConsoleUI {
+    /** Logger for this class */
     private static final Logger logger = LoggerFactory.getLogger(ConsoleUI.class);
+
+    /** Scanner for reading user input */
     private final Scanner scanner;
+
+    /** Service for handling player authentication */
     private final AuthService authService;
+
+    /** Repository for accessing game map data */
     private final GameRepository gameRepository;
+
+    /** Repository for accessing item data */
     private final ItemRepository itemRepository;
+
+    /** Flag indicating if the UI is currently running */
     private boolean running;
 
+    /**
+     * Creates a new ConsoleUI with the specified dependencies.
+     *
+     * @param authService Service for player authentication
+     * @param gameRepository Repository for game map data
+     * @param itemRepository Repository for item data
+     */
     public ConsoleUI(AuthService authService, GameRepository gameRepository, ItemRepository itemRepository) {
         this.scanner = new Scanner(System.in);
         this.authService = authService;
@@ -25,6 +53,10 @@ public class ConsoleUI {
         this.itemRepository = itemRepository;
     }
 
+    /**
+     * Starts the user interface.
+     * Shows the welcome message and enters the main menu loop.
+     */
     public void start() {
         running = true;
         showWelcomeMessage();
@@ -40,12 +72,18 @@ public class ConsoleUI {
         }
     }
 
+    /**
+     * Displays the welcome message to the player.
+     */
     private void showWelcomeMessage() {
         System.out.println("Welcome to Space Explorer!");
         System.out.println("Embark on an adventure through the solar system.");
         System.out.println("Collect resources, explore planets, and survive in space.\n");
     }
 
+    /**
+     * Displays the main menu options.
+     */
     private void showMainMenu() {
         System.out.println("\n=== Space Explorer ===");
         System.out.println("1. Login");
@@ -54,6 +92,10 @@ public class ConsoleUI {
         System.out.print("Choice: ");
     }
 
+    /**
+     * Processes the user's main menu choice.
+     * Handles login, registration, and exit options.
+     */
     private void processMainMenuChoice() {
         String choice = safeReadLine();
         switch (choice) {
@@ -67,6 +109,10 @@ public class ConsoleUI {
         }
     }
 
+    /**
+     * Handles the player login process.
+     * Prompts for username and password, then attempts to authenticate.
+     */
     private void handleLogin() {
         System.out.print("Username: ");
         String username = safeReadLine();
@@ -84,6 +130,10 @@ public class ConsoleUI {
         }
     }
 
+    /**
+     * Handles the player registration process.
+     * Prompts for username and password, then attempts to create a new account.
+     */
     private void handleRegistration() {
         System.out.print("Username: ");
         String username = safeReadLine();
@@ -100,6 +150,12 @@ public class ConsoleUI {
         }
     }
 
+    /**
+     * Displays the game menu for a logged-in player.
+     * Provides options for exploration, inventory management, and more.
+     *
+     * @param player The currently logged-in player
+     */
     private void showGameMenu(Player player) {
         boolean inGame = true;
         while (inGame && running) {
@@ -133,6 +189,13 @@ public class ConsoleUI {
         }
     }
 
+    /**
+     * Handles sector exploration for a player.
+     * Displays available sectors and space objects, allows selection,
+     * and updates player location.
+     *
+     * @param player The player who is exploring
+     */
     private void exploreSector(Player player) {
         var gameMap = gameRepository.findById("").orElse(null);
         if (gameMap == null || gameMap.getSectors().isEmpty()) {
@@ -140,9 +203,9 @@ public class ConsoleUI {
             return;
         }
 
+        // Display and select sector
         System.out.println("\n=== Exploring Solar System ===");
         List<Sector> sectors = gameMap.getSectors();
-
         System.out.println("Available sectors:");
         for (int i = 0; i < sectors.size(); i++) {
             System.out.printf("%d: %s%n", i + 1, sectors.get(i).getName());
@@ -151,6 +214,7 @@ public class ConsoleUI {
         Sector selectedSector = selectFromList("Choose sector", sectors);
         if (selectedSector == null) return;
 
+        // Display and select space object within sector
         System.out.println("\nAvailable objects in " + selectedSector.getName() + ":");
         List<SpaceObject> objects = selectedSector.getObjects();
         for (int i = 0; i < objects.size(); i++) {
@@ -161,6 +225,7 @@ public class ConsoleUI {
         SpaceObject selectedObject = selectFromList("Choose destination", objects);
         if (selectedObject == null) return;
 
+        // Update player location and display information
         player.setCurrentSector(selectedSector.getId());
         player.setCurrentPlanet(selectedObject.getName());
 
@@ -182,6 +247,12 @@ public class ConsoleUI {
                 player.getUsername(), selectedObject.getName(), selectedSector.getName());
     }
 
+    /**
+     * Displays the player's inventory contents.
+     * Shows capacity and details of each item.
+     *
+     * @param player The player whose inventory to display
+     */
     private void viewInventory(Player player) {
         System.out.println("\n=== Inventory ===");
         System.out.printf("Capacity: %d/%d%n",
@@ -203,6 +274,12 @@ public class ConsoleUI {
         }
     }
 
+    /**
+     * Handles resource collection at the player's current location.
+     * Displays available resources and allows the player to collect them.
+     *
+     * @param player The player collecting resources
+     */
     private void collectResources(Player player) {
         if (player.getCurrentSector() == null || player.getCurrentPlanet() == null) {
             System.out.println("You must be at a location to collect resources");
@@ -252,6 +329,11 @@ public class ConsoleUI {
         }
     }
 
+    /**
+     * Handles dropping items from the player's inventory.
+     *
+     * @param player The player dropping an item
+     */
     private void dropItem(Player player) {
         List<Item> inventory = player.getInventory();
         if (inventory.isEmpty()) {
@@ -280,6 +362,11 @@ public class ConsoleUI {
         }
     }
 
+    /**
+     * Displays the player's current status information.
+     *
+     * @param player The player whose status to display
+     */
     private void showPlayerStatus(Player player) {
         System.out.println("\n=== Player Status ===");
         System.out.println("Username: " + player.getUsername());
@@ -292,6 +379,13 @@ public class ConsoleUI {
                 player.getInventory().size(), player.getInventorySize());
     }
 
+    /**
+     * Finds a space object at the player's current location.
+     *
+     * @param gameMap The game map to search
+     * @param player The player whose location to find
+     * @return The space object at the player's location, or null if not found
+     */
     private SpaceObject findCurrentLocation(GameMap gameMap, Player player) {
         return gameMap.getSectors().stream()
                 .filter(s -> s.getId().equals(player.getCurrentSector()))
@@ -301,6 +395,14 @@ public class ConsoleUI {
                 .orElse(null);
     }
 
+    /**
+     * Helper method for selecting an item from a list.
+     *
+     * @param prompt The prompt to display to the user
+     * @param items The list of items to choose from
+     * @param <T> The type of items in the list
+     * @return The selected item, or null if selection was invalid
+     */
     private <T> T selectFromList(String prompt, List<T> items) {
         if (items.isEmpty()) {
             System.out.println("No items available");
@@ -322,6 +424,12 @@ public class ConsoleUI {
         }
     }
 
+    /**
+     * Safely reads a line from the console.
+     * Handles potential exceptions and trims input.
+     *
+     * @return The trimmed input string, or empty string if an error occurs
+     */
     private String safeReadLine() {
         try {
             return scanner.nextLine().trim();

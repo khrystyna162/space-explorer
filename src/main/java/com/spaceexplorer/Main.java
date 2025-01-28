@@ -9,9 +9,27 @@ import main.java.com.spaceexplorer.config.ConfigLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Main entry point for the Space Explorer game.
+ * Initializes the game components and starts the user interface.
+ * Handles proper UTF-8 encoding setup and error logging.
+ *
+ * @author Space Explorer Development Team
+ * @version 1.0
+ * @since 1.0
+ */
 public class Main {
+    /**
+     * Logger for the main class
+     */
     private static final Logger logger = LoggerFactory.getLogger(Main.class);
 
+    /**
+     * Application entry point.
+     * Initializes repositories, services, and starts the console UI.
+     *
+     * @param args Command line arguments (not used)
+     */
     public static void main(String[] args) {
         setupEncoding();
 
@@ -32,6 +50,12 @@ public class Main {
         }
     }
 
+    /**
+     * Sets up proper console encoding for UTF-8 support.
+     * On Windows systems, this also configures the console codepage.
+     *
+     * @throws RuntimeException if encoding setup fails on Windows
+     */
     private static void setupEncoding() {
         System.setProperty("file.encoding", "UTF-8");
         if (System.getProperty("os.name").toLowerCase().contains("windows")) {

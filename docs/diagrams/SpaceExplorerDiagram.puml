@@ -1,0 +1,179 @@
+@startuml Space Explorer
+
+' Стилізація
+skinparam class {
+    BackgroundColor White
+    ArrowColor Black
+    BorderColor Black
+}
+
+' Пакет з моделями
+package "model" {
+    class Player {
+        - id: String
+        - username: String
+        - password: String
+        - health: int
+        - inventorySize: int
+        - currentSector: String
+        - currentPlanet: String
+        - inventory: List<Item>
+        + Player()
+        + Player(username: String, password: String)
+        + getters/setters
+        + addItem(item: Item)
+        + removeItem(item: Item)
+    }
+
+    class Item {
+        - name: String
+        - type: String
+        - description: String
+        + Item()
+        + Item(name: String, type: String)
+        + getters/setters
+    }
+
+    class GameMap {
+        - sectors: List<Sector>
+        + GameMap()
+        + getSectors(): List<Sector>
+        + setSectors(sectors: List<Sector>)
+        + addSector(sector: Sector)
+        + removeSector(sector: Sector)
+    }
+
+    class Sector {
+        - id: String
+        - name: String
+        - objects: List<SpaceObject>
+        + Sector()
+        + getters/setters
+    }
+
+    class SpaceObject {
+        - type: ObjectType
+        - name: String
+        - description: String
+        - resources: List<ResourceType>
+        - facts: List<String>
+        + SpaceObject()
+        + getters/setters
+    }
+
+    enum ObjectType {
+        PLANET
+        ASTEROID
+        SPACE_STATION
+    }
+
+    enum ResourceType {
+        IRON
+        NICKEL
+        TITANIUM
+        WATER
+        MINERALS
+        OXYGEN
+        ...
+    }
+}
+
+' Пакет з репозиторіями
+package "repository" {
+    interface Repository<T, ID> {
+        + save(entity: T)
+        + findById(id: ID): Optional<T>
+        + findAll(): List<T>
+        + delete(id: ID)
+        + update(id: ID, entity: T)
+        + exists(id: ID): boolean
+    }
+
+    abstract class BaseRepository<T> {
+        # mapper: ObjectMapper
+        # filePath: String
+        # logger: Logger
+        + BaseRepository(filePath: String)
+        # writeToFile(data: Object)
+        # readFromFile(type: Class<R>): R
+        # readFromFile(typeReference: TypeReference<R>): R
+    }
+
+    class PlayerRepository {
+        - players: List<Player>
+        + PlayerRepository(filePath: String)
+        + findByUsername(username: String): Optional<Player>
+    }
+
+    class ItemRepository {
+        - items: List<Item>
+        + ItemRepository(filePath: String)
+        + findByType(type: String): List<Item>
+    }
+
+    class GameRepository {
+        + GameRepository(filePath: String)
+    }
+}
+
+' Пакет з сервісами
+package "service.auth" {
+    class AuthService {
+        - playerRepository: PlayerRepository
+        + AuthService(playerRepository: PlayerRepository)
+        + register(username: String, password: String): Player
+        + login(username: String, password: String): Player
+    }
+
+    class PasswordHasher {
+        - {static} ALGORITHM: String
+        - {static} ITERATIONS: int
+        - {static} KEY_LENGTH: int
+        - {static} SALT: byte[]
+        + {static} hashPassword(password: String): String
+        + {static} verifyPassword(password: String, hash: String): boolean
+    }
+}
+
+' Пакет з конфігурацією
+package "config" {
+    class ConfigLoader {
+        - {static} config: Map<String, Map<String, String>>
+        + {static} getPath(key: String): String
+    }
+}
+
+' Пакет з UI
+package "ui" {
+    class ConsoleUI {
+        - scanner: Scanner
+        - authService: AuthService
+        - gameRepository: GameRepository
+        - itemRepository: ItemRepository
+        - running: boolean
+        + ConsoleUI(authService: AuthService, gameRepository: GameRepository, itemRepository: ItemRepository)
+        + start()
+    }
+}
+
+' Відносини між класами
+Player "1" *--> "*" Item : has
+GameMap "1" *--> "*" Sector : contains
+Sector "1" *--> "*" SpaceObject : contains
+SpaceObject --> ObjectType : has type
+SpaceObject --> "*" ResourceType : has resources
+
+BaseRepository <|-- PlayerRepository
+BaseRepository <|-- ItemRepository
+BaseRepository <|-- GameRepository
+Repository <|.. PlayerRepository
+Repository <|.. ItemRepository
+Repository <|.. GameRepository
+
+ConsoleUI --> AuthService : uses
+ConsoleUI --> GameRepository : uses
+ConsoleUI --> ItemRepository : uses
+AuthService --> PlayerRepository : uses
+AuthService --> PasswordHasher : uses
+
+@enduml
