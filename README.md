@@ -8,7 +8,6 @@ Text-based space exploration game where players can explore the solar system, co
 - [Technical Details](#technical-details)
 - [Getting Started](#getting-started)
 - [Game Mechanics](#game-mechanics)
-- [Development](#development)
 - [Documentation](#documentation)
 
 ## Features
@@ -64,22 +63,6 @@ The application follows a layered architecture:
 - Java 17 or higher
 - Text editor or IDE (IntelliJ IDEA recommended)
 
-### Installation
-1. Clone the repository
-```bash
-git clone https://github.com/khrystyna162/space-explorer.git
-```
-
-2. Compile the project
-```bash
-
-```
-
-3. Run the game
-```bash
-
-```
-
 ## Game Mechanics
 
 ### Available Commands
@@ -102,22 +85,6 @@ git clone https://github.com/khrystyna162/space-explorer.git
 - **Planets**: Large celestial bodies with various resources
 - **Asteroids**: Small objects rich in minerals
 - **Space Stations**: Artificial structures with unique resources
-
-## Development
-
-### Building Documentation
-```bash
-# Generate JavaDoc
-
-# View UML diagrams
-
-```
-
-### Testing
-Run the test suite:
-```bash
-
-```
 
 ### Code Examples
 
@@ -142,14 +109,6 @@ Full JavaDoc documentation is available in the `docs/javadoc` directory.
 ### UML Diagrams
 - File diagram: `docs/diagrams/SpaceExplorerDiagram.puml`
 
-### Configuration
-Game configuration is stored in `config.yaml`:
-```yaml
-paths:
-  gameMap: data/game_map.json
-  players: data/players.json
-  items: data/items.json
-```
 
 ## Contributing
 1. Fork the repository

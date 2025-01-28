@@ -5,7 +5,6 @@ import main.java.com.spaceexplorer.repository.ItemRepository;
 import main.java.com.spaceexplorer.repository.PlayerRepository;
 import main.java.com.spaceexplorer.service.auth.AuthService;
 import main.java.com.spaceexplorer.ui.ConsoleUI;
-import main.java.com.spaceexplorer.config.ConfigLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
