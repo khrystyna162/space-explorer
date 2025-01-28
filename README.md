@@ -25,16 +25,18 @@ src/
 ├── main/
 │   └── java/
 │       └── com/
-│           └── spaceexplorer/
-│               ├── config/          # Configuration loading
-│               ├── model/           # Game entities
-│               ├── repository/      # Data persistence
-│               ├── service/         # Business logic
-│               └── ui/             # User interface
+│           ├── spaceexplorer/
+│           │   ├── config/          # Configuration loading
+│           │   ├── model/           # Game entities
+│           │   ├── repository/      # Data persistence
+│           │   ├── service/         # Business logic
+│           │   └── ui/              # User interface
+│           └── resources            # Game resources
 └── test/
-    └── java/
-        └── com/
-            └── spaceexplorer/       # Test classes
+    ├── java/
+    │    └── com/
+    │       └── spaceexplorer/       # Test classes
+    └── resources                    # Test resources
 ```
 
 ## Technical Details
@@ -157,4 +159,4 @@ paths:
 5. Create a Pull Request
 
 ## License
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License.
